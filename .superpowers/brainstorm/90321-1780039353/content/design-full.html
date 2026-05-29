@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Preview — Oumou & Sekouba</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ivory: #F5EDD8;
+    --ivory-dark: #EDE0C4;
+    --gold: #C49848;
+    --gold-light: #D4AF6A;
+    --gold-pale: rgba(196,152,72,0.15);
+    --brown: #3D2B0D;
+    --brown-mid: #6B4A1E;
+    --brown-light: #8B6914;
+    --text-muted: #B8A88A;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--ivory);
+    color: var(--brown);
+    font-size: 13px;
+  }
+
+  /* ── LABEL ── */
+  .preview-label {
+    background: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 29px;
+    z-index: 90;
+    background: rgba(245,237,216,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(196,152,72,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 48px;
+  }
+  nav .logo {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--brown);
+    letter-spacing: 0.5px;
+  }
+  nav .links {
+    display: flex;
+    gap: 32px;
+  }
+  nav .links a {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    text-decoration: none;
+  }
+  nav .links a.cta {
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 1px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(196,152,72,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 80%, rgba(196,152,72,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 25% at 80% 70%, rgba(196,152,72,0.06) 0%, transparent 60%);
+  }
+
+  /* Couple illustration placeholder — will be replaced with actual image */
+  .couple-illustration {
+    width: 240px;
+    height: 300px;
+    margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+    background: url('/0524.MOV.png') center/contain no-repeat, linear-gradient(180deg, rgba(196,152,72,0.1) 0%, transparent 100%);
+    border-radius: 50% 50% 0 0;
+  }
+  .couple-illustration-fallback {
+    width: 240px;
+    height: 300px;
+    margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .couple-illustration-fallback::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(196,152,72,0.08) 0%, rgba(196,152,72,0.04) 100%);
+    border-radius: 50% 50% 0 0;
+    border: 1px solid rgba(196,152,72,0.2);
+  }
+
+  /* Inline SVG couple silhouette */
+  .couple-svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero .eyebrow {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--brown);
+    line-height: 1.05;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .et {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--gold);
+    display: block;
+    margin: 6px 0;
+  }
+  .hero .date-line {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .date-line::before,
+  .hero .date-line::after {
+    content: '';
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+  .hero .date-text {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--brown-light);
+    text-transform: uppercase;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 1;
+  }
+  .scroll-hint span {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .scroll-hint .line {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(var(--gold), transparent);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 48px;
+    margin: 0;
+  }
+  .divider .bar { flex: 1; height: 1px; background: rgba(196,152,72,0.25); }
+  .divider .ornament {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  /* ── PROGRAMME SECTION ── */
+  .programme {
+    padding: 80px 48px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .programme .day-badge {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .programme h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--brown);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .programme .venue-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .programme .venue-tag::before {
+    content: '📍';
+    font-size: 10px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(var(--gold-light), rgba(196,152,72,0.1));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -23px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--ivory);
+    box-shadow: 0 0 0 1px var(--gold);
+  }
+  .timeline-item .time {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+  .timeline-item .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--brown);
+    margin-bottom: 2px;
+  }
+  .timeline-item .desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ── VENUES ── */
+  .venues {
+    background: linear-gradient(180deg, var(--ivory) 0%, #EDE0C4 100%);
+    padding: 80px 48px;
+  }
+  .venues .section-label {
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 12px;
+  }
+  .venues h2 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 36px;
+    text-align: center;
+    font-weight: 400;
+    color: var(--brown);
+    margin-bottom: 48px;
+  }
+  .venues-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .venue-card {
+    background: var(--ivory);
+    border: 1px solid rgba(196,152,72,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .venue-card .map-placeholder {
+    height: 120px;
+    background: linear-gradient(135deg, #E8D5A3 0%, #D4AF6A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    opacity: 0.6;
+  }
+  .venue-card .venue-info {
+    padding: 20px;
+  }
+  .venue-card .day-tag {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .venue-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--brown);
+    margin-bottom: 4px;
+  }
+  .venue-card .address {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .venue-card .map-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(196,152,72,0.4);
+    text-decoration: none;
+    padding-bottom: 1px;
+  }
+
+  /* ── RSVP ── */
+  .rsvp {
+    padding: 80px 48px;
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .rsvp .section-label {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 12px;
+  }
+  .rsvp h2 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--brown);
+    margin-bottom: 12px;
+  }
+  .rsvp p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+  .rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(196,152,72,0.4);
+    padding: 8px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--brown);
+    outline: none;
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .btn-submit {
+    margin-top: 8px;
+    padding: 14px 40px;
+    background: var(--gold);
+    color: var(--ivory);
+    border: none;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    align-self: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown);
+    padding: 48px;
+    text-align: center;
+  }
+  footer .footer-names {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+  footer .footer-date {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(196,152,72,0.7);
+    margin-bottom: 20px;
+  }
+  footer .footer-note {
+    font-size: 10px;
+    color: rgba(245,237,216,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTION LABELS inside page ── */
+  .section-marker {
+    background: rgba(196,152,72,0.06);
+    border: 1px dashed rgba(196,152,72,0.3);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: inline-block;
+    margin-bottom: 24px;
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-label">Design Preview — Oumou & Sekouba • Cliquez ci-dessous pour valider</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Oumou & Sekouba</div>
+  <div class="links">
+    <a href="#">Programme</a>
+    <a href="#">Lieux</a>
+    <a href="#" class="cta">RSVP</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Couple illustration area -->
+  <div style="position:relative;z-index:1;margin-bottom:36px;">
+    <svg width="200" height="260" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" class="couple-svg">
+      <!-- Background glow -->
+      <ellipse cx="100" cy="220" rx="90" ry="30" fill="rgba(196,152,72,0.08)"/>
+      <!-- Man silhouette (left) -->
+      <ellipse cx="72" cy="48" rx="22" ry="26" fill="#C49848" opacity="0.85"/>
+      <rect x="50" y="68" width="46" height="70" rx="6" fill="#C49848" opacity="0.75"/>
+      <path d="M50 90 Q38 110 40 140 L56 140 Q58 120 62 110Z" fill="#C49848" opacity="0.65"/>
+      <path d="M96 90 Q108 110 106 140 L90 140 Q88 120 84 110Z" fill="#C49848" opacity="0.65"/>
+      <rect x="46" y="138" width="16" height="50" rx="4" fill="#8B6914" opacity="0.7"/>
+      <rect x="84" y="138" width="16" height="50" rx="4" fill="#8B6914" opacity="0.7"/>
+      <!-- Headwrap man -->
+      <ellipse cx="72" cy="36" rx="24" ry="14" fill="#D4AF6A" opacity="0.9"/>
+      <!-- Woman silhouette (right) -->
+      <ellipse cx="132" cy="50" rx="20" ry="24" fill="#B8A88A" opacity="0.85"/>
+      <path d="M112 72 Q100 90 104 160 L160 160 Q164 90 152 72Z" fill="#B8A88A" opacity="0.7"/>
+      <!-- Dress flare -->
+      <path d="M104 160 Q90 180 92 200 L108 198 Q110 182 112 168Z" fill="#B8A88A" opacity="0.55"/>
+      <path d="M160 160 Q174 180 172 200 L156 198 Q154 182 152 168Z" fill="#B8A88A" opacity="0.55"/>
+      <!-- Woman headwrap -->
+      <ellipse cx="132" cy="38" rx="22" ry="16" fill="#C49848" opacity="0.8"/>
+      <path d="M132 22 Q150 18 156 32 Q148 26 132 28 Q116 26 108 32 Q114 18 132 22Z" fill="#D4AF6A" opacity="0.9"/>
+      <!-- Gold jewelry accents -->
+      <circle cx="132" cy="64" r="3" fill="#D4AF6A" opacity="0.8"/>
+      <circle cx="72" cy="66" r="2" fill="#D4AF6A" opacity="0.8"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Avec leurs familles</div>
+  <h1>
+    Oumou
+    <span class="et">et</span>
+    Sekouba
+  </h1>
+  <div class="date-line">
+    <span class="date-text">25 & 27 Juin 2026 · Villebon-sur-Yvette</span>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Défiler</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider"><div class="bar"></div><div class="ornament">✦</div><div class="bar"></div></div>
+
+<!-- PROGRAMME DAY 1 -->
+<section class="programme">
+  <div class="section-marker">Jeudi 25 Juin 2026</div>
+  <div class="day-badge">Jour 1</div>
+  <h2>Mariage Religieux</h2>
+  <div class="venue-tag">1 rue des Jonquilles, 91140 Villebon-sur-Yvette</div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="time">14H00</div>
+      <div class="title">Accueil des Invités</div>
+      <div class="desc">Les invités prennent place</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">15H00</div>
+      <div class="title">Cérémonie Religieuse</div>
+      <div class="desc">Début officiel de la cérémonie</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">17H00 – 19H00</div>
+      <div class="title">Félicitations</div>
+      <div class="desc">Fin officielle · Moment de joie et de partage</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider"><div class="bar"></div><div class="ornament">✦</div><div class="bar"></div></div>
+
+<!-- PROGRAMME DAY 2 -->
+<section class="programme">
+  <div class="section-marker">Samedi 27 Juin 2026</div>
+  <div class="day-badge">Jour 2</div>
+  <h2>Mariage Civil</h2>
+  <div class="venue-tag">Place Gérard-Nevers, 91140 Villebon-sur-Yvette</div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="time">15H00</div>
+      <div class="title">Arrivée des Invités</div>
+      <div class="desc">Les invités prennent place à la Mairie</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">15H30</div>
+      <div class="title">Cérémonie Civile</div>
+      <div class="desc">Prononciation des vœux</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">16H00</div>
+      <div class="title">Sortie & Félicitations</div>
+      <div class="desc">Sortie des mariés · Séance photos</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">17H00 – 19H30</div>
+      <div class="title">Cocktail</div>
+      <div class="desc">Accueil des invités · Musique · Animations</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">19H30 – 21H30</div>
+      <div class="title">Dîner</div>
+      <div class="desc">Placement des invités · Différents plats · Musique traditionnelle</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">21H30 – 23H00</div>
+      <div class="title">Début de Fête</div>
+      <div class="desc">Musique traditionnelle & DJ pour lancer la soirée dansante</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">23H15</div>
+      <div class="title">Coupure du Gâteau</div>
+      <div class="desc">Dégustation du gâteau de mariage</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">23H30 – 3H30</div>
+      <div class="title">DJ Party</div>
+      <div class="desc">Ouverture de la piste de danse · Soirée jusqu'au bout de la nuit</div>
+    </div>
+  </div>
+</section>
+
+<!-- VENUES -->
+<section class="venues">
+  <div class="section-label">Les Lieux</div>
+  <h2>Où nous rejoindre</h2>
+  <div class="venues-grid">
+    <div class="venue-card">
+      <div class="map-placeholder">🗺</div>
+      <div class="venue-info">
+        <div class="day-tag">Jeudi 25 Juin · Mariage Religieux</div>
+        <h3>1 Rue des Jonquilles</h3>
+        <div class="address">1 rue des Jonquilles<br>91140 Villebon-sur-Yvette</div>
+        <a href="#" class="map-link">Voir sur Google Maps →</a>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="map-placeholder">🗺</div>
+      <div class="venue-info">
+        <div class="day-tag">Samedi 27 Juin · Mariage Civil</div>
+        <h3>Place Gérard-Nevers</h3>
+        <div class="address">Place Gérard-Nevers<br>91140 Villebon-sur-Yvette</div>
+        <a href="#" class="map-link">Voir sur Google Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section class="rsvp">
+  <div class="section-label">Confirmation</div>
+  <h2>Confirmer votre présence</h2>
+  <p>Nous serions honorés de votre présence. Merci de confirmer avant le <strong>1er juin 2026</strong>.</p>
+  <form class="rsvp-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom & Nom</label>
+        <input type="text" placeholder="Marie Dupont">
+      </div>
+      <div class="form-group">
+        <label>Nombre de personnes</label>
+        <input type="number" placeholder="2" min="1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Vous serez présent(e) ?</label>
+      <select>
+        <option>Oui, avec plaisir !</option>
+        <option>Non, malheureusement</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Jour(s) de présence</label>
+      <select>
+        <option>Les deux jours (25 & 27 Juin)</option>
+        <option>Jeudi 25 Juin seulement</option>
+        <option>Samedi 27 Juin seulement</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Message (optionnel)</label>
+      <textarea placeholder="Un mot pour les mariés..."></textarea>
+    </div>
+    <button type="submit" class="btn-submit">Confirmer ma présence</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-names">Oumou & Sekouba</div>
+  <div class="footer-date">25 & 27 Juin 2026 · Villebon-sur-Yvette</div>
+  <div class="footer-note">Avec leurs familles ✦</div>
+</footer>
+
+</body>
+</html>

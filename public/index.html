@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oumou & Sekouba — 28 & 27 Juin 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   RESET & TOKENS
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ivory:      #F5EDD8;
+  --ivory-mid:  #EDE0C4;
+  --ivory-dark: #E0CFA8;
+  --gold:       #C49848;
+  --gold-light: #D4AF6A;
+  --gold-pale:  rgba(196,152,72,0.18);
+  --gold-glow:  rgba(196,152,72,0.08);
+  --brown:      #3D2B0D;
+  --brown-mid:  #6B4A1E;
+  --brown-soft: #8B6914;
+  --muted:      #A89070;
+  --r: 4px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--ivory);
+  color: var(--brown);
+  overflow-x: hidden;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* ─────────────────────────────────────────
+   PETAL CANVAS
+───────────────────────────────────────── */
+#petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ─────────────────────────────────────────
+   MUSIC BUTTON
+───────────────────────────────────────── */
+#music-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--brown);
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(61,43,13,0.3);
+  transition: transform 0.2s, background 0.2s;
+}
+#music-btn:hover { transform: scale(1.08); background: var(--brown-mid); }
+#music-btn.playing { animation: pulse-ring 2s ease-out infinite; }
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(196,152,72,0.5); }
+  70%  { box-shadow: 0 0 0 12px rgba(196,152,72,0); }
+  100% { box-shadow: 0 0 0 0 rgba(196,152,72,0); }
+}
+
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,237,216,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(196,152,72,0.25);
+  padding: 0 56px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--brown);
+  letter-spacing: 0.3px;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links .nav-rsvp {
+  color: var(--gold);
+  border-bottom: 1px solid rgba(196,152,72,0.5);
+  padding-bottom: 1px;
+}
+
+/* ─────────────────────────────────────────
+   DRESS CODE
+───────────────────────────────────────── */
+.dresscode {
+  padding: 90px 0;
+}
+.dresscode .bg-img {
+  background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80');
+  opacity: 0.07;
+}
+.dresscode-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.dresscode-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.9;
+  max-width: 560px;
+  margin: 0 auto 52px;
+}
+.color-swatches {
+  display: flex;
+  justify-content: center;
+  gap: 64px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.swatch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.swatch-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.swatch-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18), inset 0 2px 4px rgba(255,255,255,0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.swatch-item:hover .swatch-circle {
+  transform: scale(1.07);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.22), inset 0 2px 4px rgba(255,255,255,0.25);
+}
+.swatch-label {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--brown);
+}
+
+.swatch-word {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+
+/* ─────────────────────────────────────────
+   SECTION BG HELPER
+───────────────────────────────────────── */
+.has-bg { position: relative; overflow: hidden; }
+.has-bg .bg-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s;
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 24px 80px;
+  position: relative;
+}
+.hero .bg-img {
+  background-image: url('couple.png');
+  background-size: auto 90%;
+  background-position: center 8%;
+  background-repeat: no-repeat;
+  opacity: 0.75;
+  mix-blend-mode: multiply;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 56vh; /* push text below the couple illustration */
+}
+
+.couple-wrap {
+  width: 260px;
+  height: 320px;
+  margin: 0 auto 44px;
+  position: relative;
+}
+.couple-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse at center, rgba(196,152,72,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.06); }
+}
+.couple-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 20px 40px rgba(61,43,13,0.15));
+}
+
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+  margin-bottom: 22px;
+}
+.hero-names {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--brown);
+  line-height: 1.0;
+}
+.hero-names .name { font-size: clamp(52px, 8vw, 80px); display: block; }
+.hero-names .et {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  color: var(--gold);
+  display: block;
+  margin: 8px 0;
+  font-style: italic;
+}
+.hero-dateline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 32px;
+}
+.hero-dateline .rule { width: 56px; height: 1px; background: var(--gold); opacity: 0.5; }
+.hero-dateline .date-text {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+}
+.scroll-cue {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+}
+.scroll-cue span {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-cue .scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scroll-drop 1.8s ease-in-out infinite;
+}
+@keyframes scroll-drop {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+}
+
+/* ─────────────────────────────────────────
+   ORNAMENTAL DIVIDER
+───────────────────────────────────────── */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 80px;
+}
+.ornament-divider .line { flex: 1; height: 1px; background: rgba(196,152,72,0.25); }
+.ornament-divider .gem {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.6;
+}
+.ornament-divider .gem-outer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ornament-divider .gem-sm {
+  width: 5px; height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0.35;
+}
+
+/* ─────────────────────────────────────────
+   PROGRAMME SECTIONS
+───────────────────────────────────────── */
+.programme {
+  padding: 90px 0;
+}
+.programme .bg-img {
+  opacity: 0.08;
+}
+.programme-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+}
+.day-chip {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(196,152,72,0.35);
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+.programme h2 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 48px);
+  color: var(--brown);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.programme .venue-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 48px;
+}
+.programme .venue-line .pin { font-size: 13px; }
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-light) 0%, rgba(196,152,72,0.12) 100%);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateX(-16px);
+}
+.tl-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -27px;
+  top: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid var(--ivory);
+  box-shadow: 0 0 0 1.5px var(--gold), 0 0 12px rgba(196,152,72,0.4);
+}
+.tl-time {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+.tl-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--brown);
+  font-style: italic;
+  margin-bottom: 2px;
+}
+.tl-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* bg images per programme section */
+.prog-day1 .bg-img {
+  background-image: url('https://images.unsplash.com/photo-1487530811015-780d5c9de107?auto=format&fit=crop&w=1920&q=80');
+}
+.prog-day2 .bg-img {
+  background-image: url('https://images.unsplash.com/photo-1562619371-b67725b6fde2?auto=format&fit=crop&w=1920&q=80');
+}
+
+/* ─────────────────────────────────────────
+   VENUES
+───────────────────────────────────────── */
+.venues {
+  padding: 90px 0;
+  background: linear-gradient(180deg, var(--ivory) 0%, var(--ivory-mid) 100%);
+}
+.venues .bg-img {
+  background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80');
+  opacity: 0.07;
+}
+.venues-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+}
+.section-eyebrow {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 46px);
+  color: var(--brown);
+  text-align: center;
+  margin-bottom: 56px;
+  line-height: 1.15;
+}
+.venues-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+.venue-card {
+  border: 1px solid rgba(196,152,72,0.28);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--ivory);
+  opacity: 0;
+  transform: translateY(24px);
+}
+.venue-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.venue-card:last-child { transition-delay: 0.12s; }
+.venue-map {
+  height: 140px;
+  overflow: hidden;
+  position: relative;
+}
+.venue-map iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  filter: sepia(30%) saturate(0.7) hue-rotate(10deg);
+  opacity: 0.85;
+}
+.venue-map-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--ivory-dark) 0%, var(--gold-pale) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+.venue-body { padding: 24px; }
+.venue-day {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.venue-name {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--brown);
+  margin-bottom: 6px;
+}
+.venue-address {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.venue-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(196,152,72,0.4);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.venue-link:hover { color: var(--brown); border-color: var(--brown-soft); }
+
+/* ─────────────────────────────────────────
+   RSVP
+───────────────────────────────────────── */
+.rsvp-section {
+  padding: 90px 0;
+}
+.rsvp-section .bg-img {
+  background-image: url('https://images.unsplash.com/photo-1445551530857-3a9864e8d138?auto=format&fit=crop&w=1920&q=80');
+  opacity: 0.08;
+}
+.rsvp-inner {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 0 32px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.rsvp-intro {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-bottom: 48px;
+}
+.rsvp-intro strong { color: var(--brown-mid); font-weight: 500; }
+
+.rsvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--brown-soft);
+}
+.form-input,
+.form-select,
+.form-textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(196,152,72,0.38);
+  padding: 10px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--brown);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.form-input::placeholder { color: var(--muted); font-size: 13px; }
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus { border-bottom-color: var(--gold); }
+.form-select { cursor: pointer; -webkit-appearance: none; appearance: none; }
+.form-select option { background: var(--ivory); color: var(--brown); }
+.form-textarea { resize: vertical; min-height: 70px; }
+
+.btn-submit {
+  align-self: center;
+  margin-top: 8px;
+  padding: 16px 52px;
+  background: var(--brown);
+  color: var(--gold-light);
+  border: 2px solid var(--gold);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.25s, color 0.25s, transform 0.15s;
+}
+.btn-submit:hover {
+  background: var(--gold);
+  color: var(--ivory);
+  transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  background: var(--brown);
+  padding: 64px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(196,152,72,0.12) 0%, transparent 60%);
+}
+.footer-inner { position: relative; z-index: 1; }
+.footer-names {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--ivory);
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.footer-et {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--gold);
+  display: block;
+  margin: 4px 0;
+}
+.footer-date {
+  font-size: 10px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: rgba(196,152,72,0.65);
+  margin: 20px 0 10px;
+}
+.footer-tagline {
+  font-size: 11px;
+  color: rgba(245,237,216,0.25);
+  letter-spacing: 1.5px;
+}
+
+/* ─────────────────────────────────────────
+   SUCCESS STATE
+───────────────────────────────────────── */
+.rsvp-success {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  border: 1px solid rgba(196,152,72,0.35);
+  border-radius: var(--r);
+  text-align: center;
+}
+.rsvp-success.show { display: flex; }
+.rsvp-success .success-icon { font-size: 36px; }
+.rsvp-success h3 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--brown);
+}
+.rsvp-success p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 700px) {
+  nav { padding: 0 24px; }
+  .nav-links { gap: 20px; }
+  .nav-links a { font-size: 9px; letter-spacing: 1.5px; }
+  .venues-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .ornament-divider { padding: 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── PETAL CANVAS ── -->
+<canvas id="petals"></canvas>
+
+<!-- ── AUDIO ── -->
+<audio id="bg-music" loop preload="none">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" title="Musique" aria-label="Musique">♪</button>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#hero" class="nav-logo">Oumou & Sekouba</a>
+  <ul class="nav-links">
+    <li><a href="#programme">Programme</a></li>
+    <li><a href="#lieux">Lieux</a></li>
+    <li><a href="#dresscode">Dress Code</a></li>
+    <li><a href="#rsvp" class="nav-rsvp">RSVP</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero has-bg" id="hero">
+  <div class="bg-img"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Avec leurs familles</p>
+    <div class="hero-names">
+      <span class="name">Oumou</span>
+      <span class="et">et</span>
+      <span class="name">Sekouba</span>
+    </div>
+    <div class="hero-dateline">
+      <div class="rule"></div>
+      <span class="date-text">28 & 27 Juin 2026 · Villebon-sur-Yvette</span>
+      <div class="rule"></div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Défiler</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ── PROGRAMME DAY 2 ── -->
+<section class="programme has-bg prog-day2" id="programme">
+  <div class="bg-img"></div>
+  <div class="programme-inner">
+    <div class="day-chip">Samedi 27 Juin 2026</div>
+    <h2>Mariage Civil</h2>
+    <div class="venue-line">
+      <span class="pin">📍</span>
+      <span>Place Gérard-Nevers, 91140 Villebon-sur-Yvette</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">15H00</div>
+        <div class="tl-title">Arrivée des Invités</div>
+        <div class="tl-desc">Les invités prennent place à la Mairie</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">15H30</div>
+        <div class="tl-title">Cérémonie Civile</div>
+        <div class="tl-desc">Prononciation des vœux</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">16H00</div>
+        <div class="tl-title">Sortie & Félicitations</div>
+        <div class="tl-desc">Sortie des mariés · Séance photos</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">17H00 – 19H30</div>
+        <div class="tl-title">Cocktail</div>
+        <div class="tl-desc">Accueil des invités · Musique · Animations</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">19H30 – 21H30</div>
+        <div class="tl-title">Dîner</div>
+        <div class="tl-desc">Placement des invités · Différents plats · Musique traditionnelle</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">21H30 – 23H00</div>
+        <div class="tl-title">Début de Fête</div>
+        <div class="tl-desc">Musique traditionnelle & DJ · Lancement de la soirée dansante</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">23H15</div>
+        <div class="tl-title">Coupure du Gâteau</div>
+        <div class="tl-desc">Dégustation du gâteau de mariage</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">23H30 – 3H30</div>
+        <div class="tl-title">DJ Party</div>
+        <div class="tl-desc">Ouverture de la piste de danse · Soirée jusqu'au bout de la nuit</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ── PROGRAMME DAY 1 ── -->
+<section class="programme has-bg prog-day1">
+  <div class="bg-img"></div>
+  <div class="programme-inner">
+    <div class="day-chip">Jeudi 28 Juin 2026</div>
+    <h2>Mariage Religieux</h2>
+    <div class="venue-line">
+      <span class="pin">📍</span>
+      <span>1 rue des Jonquilles, 91140 Villebon-sur-Yvette</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">14H00</div>
+        <div class="tl-title">Accueil des Invités</div>
+        <div class="tl-desc">Les invités prennent place</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">15H00</div>
+        <div class="tl-title">Cérémonie Religieuse</div>
+        <div class="tl-desc">Début officiel de la cérémonie</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">17H00 – 19H00</div>
+        <div class="tl-title">Félicitations</div>
+        <div class="tl-desc">Fin de la cérémonie · Moment de joie et de partage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ── VENUES ── -->
+<section class="venues has-bg" id="lieux">
+  <div class="bg-img"></div>
+  <div class="venues-inner">
+    <p class="section-eyebrow">Les Lieux</p>
+    <h2 class="section-title">Où nous rejoindre</h2>
+    <div class="venues-grid">
+      <div class="venue-card">
+        <div class="venue-map">
+          <iframe
+            src="https://maps.google.com/maps?q=1+rue+des+Jonquilles,+91140+Villebon-sur-Yvette&output=embed&z=15"
+            loading="lazy"
+            allowfullscreen
+            title="1 rue des Jonquilles">
+          </iframe>
+        </div>
+        <div class="venue-body">
+          <div class="venue-day">Jeudi 28 Juin · Mariage Religieux</div>
+          <div class="venue-name">1 Rue des Jonquilles</div>
+          <div class="venue-address">1 rue des Jonquilles<br>91140 Villebon-sur-Yvette</div>
+          <a href="https://maps.google.com/?q=1+rue+des+Jonquilles,+91140+Villebon-sur-Yvette" target="_blank" rel="noopener" class="venue-link">
+            Voir sur Google Maps →
+          </a>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-map">
+          <iframe
+            src="https://maps.google.com/maps?q=Place+Gerard-Nevers,+91140+Villebon-sur-Yvette&output=embed&z=15"
+            loading="lazy"
+            allowfullscreen
+            title="Place Gérard-Nevers">
+          </iframe>
+        </div>
+        <div class="venue-body">
+          <div class="venue-day">Samedi 27 Juin · Mariage Civil</div>
+          <div class="venue-name">Place Gérard-Nevers</div>
+          <div class="venue-address">Place Gérard-Nevers<br>91140 Villebon-sur-Yvette</div>
+          <a href="https://maps.google.com/?q=Place+Gerard-Nevers,+91140+Villebon-sur-Yvette" target="_blank" rel="noopener" class="venue-link">
+            Voir sur Google Maps →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ── DRESS CODE ── -->
+<section class="dresscode has-bg" id="dresscode">
+  <div class="bg-img"></div>
+  <div class="dresscode-inner">
+    <p class="section-eyebrow">Tenue de Cérémonie</p>
+    <h2 class="section-title">Dress Code</h2>
+    <p class="dresscode-subtitle">
+      Pour honorer la beauté et l'élégance de cette occasion spéciale,<br>
+      Oumou et Sekouba vous invitent à respecter un code vestimentaire coordonné.<br><br>
+      Que vous soyez homme ou femme, ces teintes vous permettront<br>
+      de vous fondre harmonieusement dans la magie de la célébration.
+    </p>
+
+    <!-- Color swatches -->
+    <div class="color-swatches">
+      <div class="swatch-item">
+        <div class="swatch-circle" style="background: #C4521A;"></div>
+        <span class="swatch-label">Orange Foncé</span>
+      </div>
+      <div class="swatch-item" style="transition-delay:0.1s">
+        <div class="swatch-circle" style="background: #C49848;"></div>
+        <span class="swatch-label">Doré</span>
+      </div>
+      <div class="swatch-item" style="transition-delay:0.2s">
+        <div class="swatch-circle" style="background: #6B3A2A;"></div>
+        <span class="swatch-label">Marron</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ── RSVP ── -->
+<section class="rsvp-section has-bg" id="rsvp">
+  <div class="bg-img"></div>
+  <div class="rsvp-inner">
+    <p class="section-eyebrow">Confirmation de Présence</p>
+    <h2 class="section-title">Rejoignez-nous !</h2>
+    <p class="rsvp-intro">
+      Nous serions honorés de partager ce moment avec vous.<br>
+      Merci de confirmer votre présence avant le <strong>1er juin 2026</strong>.
+    </p>
+    <form class="rsvp-form" id="rsvp-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prénom & Nom</label>
+          <input type="text" class="form-input" placeholder="Marie Dupont" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nombre de personnes</label>
+          <input type="number" class="form-input" placeholder="2" min="1" max="20" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Vous serez présent(e) ?</label>
+        <select class="form-select" required>
+          <option value="" disabled selected>Choisir…</option>
+          <option value="yes">Oui, avec grand plaisir !</option>
+          <option value="no">Non, malheureusement</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Jour(s) de présence</label>
+        <select class="form-select">
+          <option value="both">Les deux jours (25 & 27 Juin)</option>
+          <option value="day1">Jeudi 28 Juin seulement — Religieux</option>
+          <option value="day2">Samedi 27 Juin seulement — Civil</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Un mot pour les mariés (optionnel)</label>
+        <textarea class="form-textarea" placeholder="Votre message..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Confirmer ma présence</button>
+    </form>
+
+    <div class="rsvp-success" id="rsvp-success">
+      <div class="success-icon">🌸</div>
+      <h3>Merci, nous vous attendons !</h3>
+      <p>Votre présence a bien été confirmée.<br>Oumou & Sekouba ont hâte de vous retrouver.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-names">
+      Oumou
+      <span class="footer-et">et</span>
+      Sekouba
+    </div>
+    <div class="footer-date">28 & 27 Juin 2026 · Villebon-sur-Yvette</div>
+    <div class="footer-tagline">Avec leurs familles ✦</div>
+  </div>
+</footer>
+
+<!-- ─────────────────────────────────────────
+     SCRIPTS
+───────────────────────────────────────── -->
+<script>
+/* ── FALLING PETALS ── */
+(function () {
+  const canvas = document.getElementById('petals');
+  const ctx = canvas.getContext('2d');
+  let W, H, petals = [];
+
+  const COLORS = [
+    'rgba(245,237,216,0.85)',
+    'rgba(212,175,106,0.75)',
+    'rgba(196,152,72,0.6)',
+    'rgba(228,210,180,0.8)',
+    'rgba(255,240,220,0.7)',
+    'rgba(196,152,72,0.4)',
+  ];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Petal {
+    constructor(fromTop) {
+      this.reset(fromTop === true);
+    }
+    reset(fromTop) {
+      this.x     = Math.random() * W;
+      this.y     = fromTop ? -20 : Math.random() * H;
+      this.r     = Math.random() * 7 + 4;
+      this.rx    = this.r * (0.4 + Math.random() * 0.4);
+      this.ry    = this.r;
+      this.vx    = (Math.random() - 0.5) * 0.6;
+      this.vy    = Math.random() * 0.9 + 0.4;
+      this.angle = Math.random() * Math.PI * 2;
+      this.spin  = (Math.random() - 0.5) * 0.025;
+      this.drift = Math.random() * 60 + 30;
+      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.life  = 0;
+    }
+    update() {
+      this.life++;
+      this.x += this.vx + Math.sin(this.life / this.drift) * 0.5;
+      this.y += this.vy;
+      this.angle += this.spin;
+      if (this.y > H + 20) this.reset(true);
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.beginPath();
+      /* petal = two bezier arcs forming a teardrop */
+      ctx.moveTo(0, -this.ry);
+      ctx.bezierCurveTo( this.rx * 1.2,  -this.ry * 0.5,  this.rx, this.ry * 0.7,  0, this.ry);
+      ctx.bezierCurveTo(-this.rx,          this.ry * 0.7, -this.rx * 1.2, -this.ry * 0.5, 0, -this.ry);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function init() {
+    resize();
+    petals = Array.from({ length: 60 }, () => new Petal(false));
+    window.addEventListener('resize', resize);
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of petals) { p.update(); p.draw(); }
+    requestAnimationFrame(loop);
+  }
+
+  init();
+  loop();
+})();
+
+/* ── MUSIC ── */
+(function () {
+  const btn   = document.getElementById('music-btn');
+  const audio = document.getElementById('bg-music');
+  let started = false;
+
+  btn.addEventListener('click', () => {
+    if (!started) {
+      audio.volume = 0.35;
+      audio.play().catch(() => {});
+      started = true;
+      btn.textContent = '♬';
+      btn.classList.add('playing');
+      btn.title = 'Couper la musique';
+    } else if (audio.paused) {
+      audio.play();
+      btn.textContent = '♬';
+      btn.classList.add('playing');
+    } else {
+      audio.pause();
+      btn.textContent = '♪';
+      btn.classList.remove('playing');
+    }
+  });
+})();
+
+/* ── SCROLL REVEAL (timeline + venue cards) ── */
+(function () {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18 });
+
+  document.querySelectorAll('.tl-item, .venue-card, .swatch-item').forEach((el, i) => {
+    if (!el.style.transitionDelay) el.style.transitionDelay = (i % 8) * 0.08 + 's';
+    io.observe(el);
+  });
+})();
+
+/* ── RSVP FORM ── */
+(function () {
+  const form    = document.getElementById('rsvp-form');
+  const success = document.getElementById('rsvp-success');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    form.style.opacity = '0';
+    form.style.transition = 'opacity 0.4s';
+    setTimeout(() => {
+      form.style.display = 'none';
+      success.classList.add('show');
+    }, 400);
+  });
+})();
+</script>
+</body>
+</html>

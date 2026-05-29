@@ -1,0 +1,109 @@
+<h2>How should the website be structured?</h2>
+<p class="subtitle">All three use the Traditional Elegance palette. The difference is in navigation and flow.</p>
+
+<div class="cards">
+
+  <!-- APPROACH A -->
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F5EDD8; padding:20px; min-height:220px; font-family:Georgia,serif; position:relative; overflow:hidden;">
+      <!-- Nav bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #C49848; padding-bottom:8px; margin-bottom:12px;">
+        <span style="font-size:9px; letter-spacing:2px; color:#8B6914; text-transform:uppercase;">O & S</span>
+        <div style="display:flex; gap:12px;">
+          <span style="font-size:8px; color:#8B6914;">Programme</span>
+          <span style="font-size:8px; color:#8B6914;">Lieux</span>
+          <span style="font-size:8px; color:#C49848; font-weight:bold;">RSVP</span>
+        </div>
+      </div>
+      <!-- Hero -->
+      <div style="text-align:center; margin-bottom:12px;">
+        <div style="width:50px; height:60px; background:linear-gradient(180deg,#C49848,#8B6914); border-radius:50% 50% 40% 40%; margin:0 auto 8px; opacity:0.3;"></div>
+        <div style="font-size:18px; color:#3D2B0D; font-style:italic;">Oumou & Sekouba</div>
+        <div style="font-size:8px; color:#8B6914; letter-spacing:2px;">25 · 27 JUIN 2026</div>
+      </div>
+      <!-- Scroll indicator -->
+      <div style="text-align:center; margin-top:8px;">
+        <div style="display:inline-block; width:1px; height:20px; background:linear-gradient(#C49848,transparent);"></div>
+        <div style="font-size:7px; color:#B8A88A; letter-spacing:1px; display:block;">↓ défiler</div>
+      </div>
+      <!-- Sections preview -->
+      <div style="display:flex; gap:4px; margin-top:8px;">
+        <div style="flex:1; height:8px; background:rgba(196,152,72,0.2); border-radius:2px;"></div>
+        <div style="flex:1; height:8px; background:rgba(196,152,72,0.15); border-radius:2px;"></div>
+        <div style="flex:1; height:8px; background:rgba(196,152,72,0.1); border-radius:2px;"></div>
+        <div style="flex:1; height:8px; background:rgba(196,152,72,0.2); border-radius:2px;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — One-page scroll <span style="font-size:11px;color:#C49848;">(Recommandé)</span></h3>
+      <p>Hero → Programme J25 → Programme J27 → Lieux → RSVP. Tout sur une page, navigation fluide. Le plus commun pour les sites de mariage.</p>
+    </div>
+  </div>
+
+  <!-- APPROACH B -->
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F5EDD8; padding:20px; min-height:220px; font-family:Georgia,serif;">
+      <!-- Two day tabs -->
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <div style="flex:1; background:#C49848; border-radius:4px 4px 0 0; padding:6px; text-align:center;">
+          <div style="font-size:8px; color:#fff; letter-spacing:1px; text-transform:uppercase;">Jeudi 25 juin</div>
+          <div style="font-size:9px; color:rgba(255,255,255,0.8);">Religieux</div>
+        </div>
+        <div style="flex:1; background:rgba(196,152,72,0.2); border-radius:4px 4px 0 0; padding:6px; text-align:center; border:1px solid #C49848;">
+          <div style="font-size:8px; color:#8B6914; letter-spacing:1px; text-transform:uppercase;">Samedi 27 juin</div>
+          <div style="font-size:9px; color:#B8A88A;">Civil</div>
+        </div>
+      </div>
+      <!-- Day content -->
+      <div style="border:1px solid rgba(196,152,72,0.3); border-radius:0 0 4px 4px; padding:10px;">
+        <div style="font-size:8px; color:#8B6914; margin-bottom:6px;">14H00 — Accueil des invités</div>
+        <div style="font-size:8px; color:#8B6914; margin-bottom:6px;">15H00 — Cérémonie religieuse</div>
+        <div style="font-size:8px; color:#8B6914;">17H00 — Félicitations</div>
+      </div>
+      <!-- Hero small -->
+      <div style="text-align:center; margin-top:10px;">
+        <div style="font-size:14px; color:#3D2B0D; font-style:italic;">Oumou & Sekouba</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Deux jours en onglets</h3>
+      <p>Le hero est en haut, puis deux onglets basculent entre J25 et J27. Clair et direct. Bien si les invités veulent consulter un seul jour rapidement.</p>
+    </div>
+  </div>
+
+  <!-- APPROACH C -->
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#F5EDD8; padding:20px; min-height:220px; font-family:Georgia,serif;">
+      <!-- Split screen -->
+      <div style="display:flex; gap:6px; height:140px;">
+        <div style="flex:1; background:linear-gradient(180deg,#3D2B0D,#5C3D10); border-radius:6px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="font-size:7px; color:rgba(245,237,216,0.6); letter-spacing:2px; text-transform:uppercase;">Jeudi 25</div>
+          <div>
+            <div style="font-size:11px; color:#F5EDD8; font-style:italic; line-height:1.3;">Mariage<br>Religieux</div>
+            <div style="font-size:7px; color:#C49848; margin-top:4px;">1 rue des jonquilles</div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; justify-content:center; gap:4px;">
+          <div style="width:1px; height:30px; background:rgba(196,152,72,0.4); margin:auto;"></div>
+          <div style="font-size:9px; color:#8B6914; font-style:italic; writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap;">O & S</div>
+          <div style="width:1px; height:30px; background:rgba(196,152,72,0.4); margin:auto;"></div>
+        </div>
+        <div style="flex:1; background:rgba(196,152,72,0.12); border-radius:6px; padding:10px; border:1px solid rgba(196,152,72,0.3); display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="font-size:7px; color:#B8A88A; letter-spacing:2px; text-transform:uppercase;">Samedi 27</div>
+          <div>
+            <div style="font-size:11px; color:#3D2B0D; font-style:italic; line-height:1.3;">Mariage<br>Civil</div>
+            <div style="font-size:7px; color:#C49848; margin-top:4px;">Pl. Gérard-Nevers</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:10px; font-size:11px; color:#3D2B0D; font-style:italic;">Oumou & Sekouba</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Écran partagé</h3>
+      <p>Les deux jours côte à côte dès l'arrivée. Visuel et audacieux. Le scroll détaille chaque jour en dessous. Original, mais plus complexe à naviguer sur mobile.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px; font-size:13px;">Click your preferred layout, then confirm in the terminal.</p>
