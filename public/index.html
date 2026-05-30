@@ -196,8 +196,79 @@ nav {
 
 
 /* ─────────────────────────────────────────
-   SECTION BG HELPER
+   COUNTDOWN
 ───────────────────────────────────────── */
+.countdown {
+  padding: 56px 24px;
+  text-align: center;
+  background: var(--brown);
+  position: relative;
+  overflow: hidden;
+}
+.countdown::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(196,152,72,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.countdown-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(196,152,72,0.7);
+  margin-bottom: 32px;
+}
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+.countdown-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 400;
+  color: var(--ivory);
+  line-height: 1;
+  letter-spacing: -1px;
+  transition: transform 0.15s ease;
+}
+.countdown-number.bump {
+  transform: scale(1.18);
+}
+.countdown-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.countdown-sep {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 56px);
+  color: rgba(196,152,72,0.35);
+  line-height: 1;
+  padding-top: 4px;
+  user-select: none;
+}
+.countdown-done {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(22px, 4vw, 32px);
+  color: var(--gold-light);
+  position: relative;
+  z-index: 1;
+}
 .has-bg { position: relative; overflow: hidden; }
 .has-bg .bg-img {
   position: absolute;
@@ -856,6 +927,43 @@ footer::before {
   <div class="line"></div>
 </div>
 
+<!-- ── COUNTDOWN ── -->
+<section class="countdown" id="countdown-section">
+  <p class="countdown-eyebrow">Le grand jour arrive dans</p>
+  <div class="countdown-grid" id="countdown-grid">
+    <div class="countdown-unit">
+      <span class="countdown-number" id="cd-days">--</span>
+      <span class="countdown-label">Jours</span>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <span class="countdown-number" id="cd-hours">--</span>
+      <span class="countdown-label">Heures</span>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <span class="countdown-number" id="cd-minutes">--</span>
+      <span class="countdown-label">Minutes</span>
+    </div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit">
+      <span class="countdown-number" id="cd-seconds">--</span>
+      <span class="countdown-label">Secondes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="ornament-divider">
+  <div class="line"></div>
+  <div class="gem-outer">
+    <div class="gem-sm"></div>
+    <div class="gem"></div>
+    <div class="gem-sm"></div>
+  </div>
+  <div class="line"></div>
+</div>
+
 <!-- ── PROGRAMME DAY 2 ── -->
 <section class="programme has-bg prog-day2" id="programme">
   <div class="bg-img"></div>
@@ -1147,6 +1255,52 @@ footer::before {
      SCRIPTS
 ───────────────────────────────────────── -->
 <script>
+/* ── COUNTDOWN ── */
+(function () {
+  const TARGET = new Date('2026-06-27T09:00:00');
+  const els = {
+    days:    document.getElementById('cd-days'),
+    hours:   document.getElementById('cd-hours'),
+    minutes: document.getElementById('cd-minutes'),
+    seconds: document.getElementById('cd-seconds'),
+  };
+  const grid = document.getElementById('countdown-grid');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function bump(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth; // reflow
+    el.classList.add('bump');
+    setTimeout(() => el.classList.remove('bump'), 150);
+  }
+
+  let prev = {};
+
+  function tick() {
+    const now  = new Date();
+    const diff = TARGET - now;
+
+    if (diff <= 0) {
+      grid.innerHTML = '<p class="countdown-done">C\'est le grand jour ! 🎉</p>';
+      return;
+    }
+
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+
+    if (d !== prev.d) { els.days.textContent    = pad(d); bump(els.days);    prev.d = d; }
+    if (h !== prev.h) { els.hours.textContent   = pad(h); bump(els.hours);   prev.h = h; }
+    if (m !== prev.m) { els.minutes.textContent = pad(m); bump(els.minutes); prev.m = m; }
+    if (s !== prev.s) { els.seconds.textContent = pad(s); bump(els.seconds); prev.s = s; }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
+
 /* ── NAV HAMBURGER ── */
 (function () {
   const btn   = document.getElementById('nav-hamburger');
