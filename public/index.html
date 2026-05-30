@@ -226,7 +226,7 @@ nav {
 }
 .hero .bg-img {
   background-image: url('couple.png');
-  background-size: auto 90%;
+  background-size: auto 100%;
   background-position: center 8%;
   background-repeat: no-repeat;
   opacity: 0.75;
@@ -762,8 +762,8 @@ footer::before {
 <canvas id="petals"></canvas>
 
 <!-- ── AUDIO ── -->
-<audio id="bg-music" loop preload="none">
-  <source src="music.mp3" type="audio/mpeg">
+<audio id="bg-music" loop preload="auto">
+  <source src="sound.mp3" type="audio/mpeg">
 </audio>
 <button id="music-btn" title="Musique" aria-label="Musique">♪</button>
 
@@ -794,9 +794,6 @@ footer::before {
       <div class="rule"></div>
     </div>
   </div>
-  <div class="scroll-cue">
-    <span>Défiler</span>
-    <div class="scroll-line"></div>
   </div>
 </section>
 
@@ -1182,24 +1179,48 @@ footer::before {
 (function () {
   const btn   = document.getElementById('music-btn');
   const audio = document.getElementById('bg-music');
-  let started = false;
 
-  btn.addEventListener('click', () => {
-    if (!started) {
-      audio.volume = 0.35;
-      audio.play().catch(() => {});
-      started = true;
+  audio.volume = 0.35;
+
+  // Autoplay on load — browsers require a user gesture first,
+  // so we attempt immediately and fall back to first interaction.
+  function tryAutoplay() {
+    audio.play().then(() => {
       btn.textContent = '♬';
       btn.classList.add('playing');
       btn.title = 'Couper la musique';
-    } else if (audio.paused) {
+    }).catch(() => {
+      // Autoplay blocked — will start on first user interaction
+      btn.textContent = '♪';
+      btn.title = 'Lancer la musique';
+    });
+  }
+
+  // Try immediately
+  tryAutoplay();
+
+  // If blocked, start on first interaction anywhere on the page
+  function onFirstInteraction() {
+    if (audio.paused) tryAutoplay();
+    document.removeEventListener('click', onFirstInteraction);
+    document.removeEventListener('touchstart', onFirstInteraction);
+  }
+  document.addEventListener('click', onFirstInteraction);
+  document.addEventListener('touchstart', onFirstInteraction);
+
+  // Toggle play / pause on button click
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // don't trigger onFirstInteraction
+    if (audio.paused) {
       audio.play();
       btn.textContent = '♬';
       btn.classList.add('playing');
+      btn.title = 'Couper la musique';
     } else {
       audio.pause();
       btn.textContent = '♪';
       btn.classList.remove('playing');
+      btn.title = 'Lancer la musique';
     }
   });
 })();
@@ -1221,13 +1242,55 @@ footer::before {
   });
 })();
 
-/* ── RSVP FORM ── */
+/* ── RSVP FORM → Google Forms ── */
 (function () {
   const form    = document.getElementById('rsvp-form');
   const success = document.getElementById('rsvp-success');
 
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfLa56msrKFyQRFOfModXKFtLZhIwGbyei5E4HhjW8Rau9Bdg/formResponse';
+  const ENTRY = {
+    nom:       'entry.65335055',
+    personnes: 'entry.307713632',
+    presence:  'entry.1988750683',
+    jours:     'entry.1297602813',
+    message:   'entry.834373141',
+  };
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    const nom       = form.querySelector('input[type="text"]').value;
+    const personnes = form.querySelector('input[type="number"]').value;
+    const presence  = form.querySelectorAll('select')[0].value;
+    const jours     = form.querySelectorAll('select')[1].value;
+    const message   = form.querySelector('textarea').value;
+
+    // Map select values to French labels for Google Form
+    const presenceLabel = presence === 'yes' ? 'Oui' : 'Non';
+    const joursMap = {
+      both: 'Les deux jours (27 & 28 Juin)',
+      day1: 'Samedi 27 Juin seulement — Civil',
+      day2: 'Dimanche 28 Juin seulement — Religieux',
+    };
+    const joursLabel = joursMap[jours] || jours;
+
+    const body = new URLSearchParams();
+    body.append(ENTRY.nom,       nom);
+    body.append(ENTRY.personnes, personnes);
+    body.append(ENTRY.presence,  presenceLabel);
+    body.append(ENTRY.jours,     joursLabel);
+    body.append(ENTRY.message,   message);
+
+    // Submit silently — no-cors means we can't read the response,
+    // but the data lands in Google Sheets.
+    fetch(FORM_ACTION, {
+      method: 'POST',
+      mode:   'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    }).catch(() => {}); // network errors silently ignored
+
+    // Show success immediately (we assume it worked)
     form.style.opacity = '0';
     form.style.transition = 'opacity 0.4s';
     setTimeout(() => {
