@@ -1105,6 +1105,39 @@ footer::before {
   const ctx = canvas.getContext('2d');
   let W, H, petals = [];
 
+  // Scroll physics
+  let scrollY     = window.scrollY;
+  let scrollVel   = 0;
+  let scrollDecay = 0.85;
+
+  // Mouse / touch tracking
+  let mouse = { x: -999, y: -999, vx: 0, vy: 0, px: -999, py: -999 };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.vx = e.clientX - mouse.px;
+    mouse.vy = e.clientY - mouse.py;
+    mouse.px = mouse.x;
+    mouse.py = mouse.y;
+    mouse.x  = e.clientX;
+    mouse.y  = e.clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    mouse.vx = t.clientX - mouse.px;
+    mouse.vy = t.clientY - mouse.py;
+    mouse.px = mouse.x;
+    mouse.py = mouse.y;
+    mouse.x  = t.clientX;
+    mouse.y  = t.clientY;
+  }, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    const newY = window.scrollY;
+    scrollVel += (newY - scrollY) * 0.18;
+    scrollY = newY;
+  }, { passive: true });
+
   const COLORS = [
     'rgba(245,237,216,0.85)',
     'rgba(212,175,106,0.75)',
@@ -1137,19 +1170,46 @@ footer::before {
       this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
       this.life  = 0;
     }
-    update() {
+    update(sv) {
       this.life++;
+
+      // Scroll influence
+      const scrollInfluence = sv * 0.06;
+
+      // Mouse repulsion
+      const dx   = this.x - mouse.x;
+      const dy   = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const RADIUS = 90;
+
+      if (dist < RADIUS && dist > 0) {
+        const force  = (1 - dist / RADIUS) * 2.8;
+        const angle  = Math.atan2(dy, dx);
+        this.vx += Math.cos(angle) * force;
+        this.vy += Math.sin(angle) * force;
+        // Cursor velocity adds a swipe direction
+        this.vx += mouse.vx * 0.04;
+        this.vy += mouse.vy * 0.04;
+        this.angle += force * 0.15;
+      }
+
+      // Dampen extra velocity back to natural drift
+      this.vx *= 0.92;
+      this.vy  = this.vy * 0.92 + (Math.random() * 0.9 + 0.4) * 0.08;
+
       this.x += this.vx + Math.sin(this.life / this.drift) * 0.5;
-      this.y += this.vy;
-      this.angle += this.spin;
+      this.y += this.vy + scrollInfluence;
+      this.x += sv * (Math.random() - 0.5) * 0.12;
+      this.angle += this.spin + sv * 0.003;
+
       if (this.y > H + 20) this.reset(true);
+      if (this.y < -20) { this.y = H + 20; }
     }
     draw() {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
       ctx.beginPath();
-      /* petal = two bezier arcs forming a teardrop */
       ctx.moveTo(0, -this.ry);
       ctx.bezierCurveTo( this.rx * 1.2,  -this.ry * 0.5,  this.rx, this.ry * 0.7,  0, this.ry);
       ctx.bezierCurveTo(-this.rx,          this.ry * 0.7, -this.rx * 1.2, -this.ry * 0.5, 0, -this.ry);
@@ -1167,7 +1227,8 @@ footer::before {
 
   function loop() {
     ctx.clearRect(0, 0, W, H);
-    for (const p of petals) { p.update(); p.draw(); }
+    scrollVel *= scrollDecay;
+    for (const p of petals) { p.update(scrollVel); p.draw(); }
     requestAnimationFrame(loop);
   }
 
